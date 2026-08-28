@@ -8,10 +8,10 @@ const navigation = [
     name: "Dashboard",
     href: "/dashboard",
   },
-  {
-    name: "States",
-    href: "/states",
-  },
+  // {
+  //   name: "States",
+  //   href: "/states",
+  // },
   {
     name: "Branches",
     href: "/branches",

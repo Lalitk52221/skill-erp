@@ -116,7 +116,10 @@
 //     </div>
 //   );
 // }
-import { prisma } from "@/lib/prisma";
+
+
+
+// import { prisma } from "@/lib/prisma";
 import { auth } from "@/auth";
 import { redirect } from "next/navigation";
 import Link from "next/link";
