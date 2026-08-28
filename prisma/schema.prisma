@@ -1,0 +1,223 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Organization {
+  id          String       @id @default(uuid())
+  name        String
+  code        String       @unique
+  email       String?
+  phone       String?
+  logoUrl     String?
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+  branches    Branch[]
+  courses     Course[]
+  enrollments Enrollment[]
+  roles       Role[]
+  states      State[]
+  students    Student[]
+  users       User[]
+}
+
+model State {
+  id             String       @id @default(uuid())
+  name           String
+  code           String
+  organizationId String
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+  branches       Branch[]
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  @@unique([organizationId, code])
+}
+
+model Branch {
+  id             String         @id @default(uuid())
+  name           String
+  code           String
+  address        String?
+  city           String?
+  phone          String?
+  organizationId String
+  stateId        String
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @updatedAt
+  batches        Batch[]
+  organization   Organization   @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  state          State          @relation(fields: [stateId], references: [id])
+  courses        BranchCourse[]
+  enrollments    Enrollment[]
+  students       Student[]
+  users          User[]
+
+  @@unique([organizationId, code])
+}
+
+model Course {
+  id             String         @id @default(uuid())
+  name           String
+  code           String
+  description    String?
+  durationMonths Int?
+  organizationId String
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @updatedAt
+  batches        Batch[]
+  branches       BranchCourse[]
+  organization   Organization   @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  enrollments    Enrollment[]
+
+  @@unique([organizationId, code])
+}
+
+model BranchCourse {
+  id        String   @id @default(uuid())
+  branchId  String
+  courseId  String
+  createdAt DateTime @default(now())
+  branch    Branch   @relation(fields: [branchId], references: [id], onDelete: Cascade)
+  course    Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
+
+  @@unique([branchId, courseId])
+}
+
+model Batch {
+  id          String       @id @default(uuid())
+  name        String
+  code        String
+  startDate   DateTime
+  endDate     DateTime?
+  capacity    Int?
+  status      BatchStatus  @default(UPCOMING)
+  branchId    String
+  courseId    String
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+  branch      Branch       @relation(fields: [branchId], references: [id], onDelete: Cascade)
+  course      Course       @relation(fields: [courseId], references: [id])
+  enrollments Enrollment[]
+
+  @@unique([branchId, code])
+}
+
+model Student {
+  id             String        @id @default(uuid())
+  studentCode    String
+  name           String
+  fatherName     String?
+  motherName     String?
+  dateOfBirth    DateTime?
+  gender         String?
+  phone          String?
+  email          String?
+  address        String?
+  city           String?
+  district       String?
+  status         StudentStatus @default(ACTIVE)
+  organizationId String
+  branchId       String
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+  enrollments    Enrollment[]
+  branch         Branch        @relation(fields: [branchId], references: [id])
+  organization   Organization  @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  @@unique([organizationId, studentCode])
+}
+
+model Enrollment {
+  id             String       @id @default(uuid())
+  admissionDate  DateTime     @default(now())
+  completionDate DateTime?
+  studentId      String
+  organizationId String
+  branchId       String
+  courseId       String
+  batchId        String
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+  batch          Batch        @relation(fields: [batchId], references: [id])
+  branch         Branch       @relation(fields: [branchId], references: [id])
+  course         Course       @relation(fields: [courseId], references: [id])
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  student        Student      @relation(fields: [studentId], references: [id], onDelete: Cascade)
+
+  @@index([studentId])
+  @@index([branchId])
+  @@index([courseId])
+  @@index([batchId])
+}
+
+model User {
+  id             String       @id @default(uuid())
+  name           String
+  email          String
+  passwordHash   String?
+  status         UserStatus   @default(ACTIVE)
+  organizationId String
+  branchId       String?
+  roleId         String
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+  branch         Branch?      @relation(fields: [branchId], references: [id])
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  role           Role         @relation(fields: [roleId], references: [id])
+
+  @@unique([organizationId, email])
+}
+
+model Role {
+  id             String           @id @default(uuid())
+  name           String
+  organizationId String
+  createdAt      DateTime         @default(now())
+  updatedAt      DateTime         @updatedAt
+  organization   Organization     @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  permissions    RolePermission[]
+  users          User[]
+
+  @@unique([organizationId, name])
+}
+
+model Permission {
+  id          String           @id @default(uuid())
+  name        String           @unique
+  description String?
+  roles       RolePermission[]
+}
+
+model RolePermission {
+  id           String     @id @default(uuid())
+  roleId       String
+  permissionId String
+  permission   Permission @relation(fields: [permissionId], references: [id], onDelete: Cascade)
+  role         Role       @relation(fields: [roleId], references: [id], onDelete: Cascade)
+
+  @@unique([roleId, permissionId])
+}
+
+enum UserStatus {
+  ACTIVE
+  INACTIVE
+}
+
+enum StudentStatus {
+  ACTIVE
+  COMPLETED
+  DROPPED
+  TRANSFERRED
+  ON_HOLD
+}
+
+enum BatchStatus {
+  UPCOMING
+  ACTIVE
+  COMPLETED
+  CANCELLED
+}
