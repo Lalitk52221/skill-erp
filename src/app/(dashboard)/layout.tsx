@@ -16,16 +16,15 @@ export default async function DashboardLayout({
   }
 
   return (
-    <div className="min-h-screen bg-gray-100">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-950">
       <Sidebar />
 
-      <div className="lg:pl-64">
-        <Header user={session.user} />
-
-        <main className="p-6">
+      <main className="min-h-screen pt-16 lg:ml-64 lg:pt-0">
+      <Header user={session.user} />
+        <div className="p-4 sm:p-6 lg:p-8">
           {children}
-        </main>
-      </div>
+        </div>
+      </main>
     </div>
   );
 }
