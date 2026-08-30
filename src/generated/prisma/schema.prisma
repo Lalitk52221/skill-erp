@@ -177,11 +177,13 @@ model Enrollment {
 }
 
 model Exam {
-  id           String   @id @default(uuid())
+  id           String     @id @default(uuid())
   name         String
+  examType     String     @default("THEORY")
   examDate     DateTime
-  maxMarks     Decimal  @db.Decimal(10, 2)
-  passingMarks Decimal  @db.Decimal(10, 2)
+  maxMarks     Decimal    @db.Decimal(10, 2)
+  passingMarks Decimal    @db.Decimal(10, 2)
+  status       ExamStatus @default(DRAFT)
 
   organizationId String
   branchId       String
@@ -191,17 +193,36 @@ model Exam {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
-  branch       Branch       @relation(fields: [branchId], references: [id])
-  course       Course       @relation(fields: [courseId], references: [id])
-  batch        Batch        @relation(fields: [batchId], references: [id])
+  organization Organization   @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  branch       Branch         @relation(fields: [branchId], references: [id])
+  course       Course         @relation(fields: [courseId], references: [id])
+  batch        Batch          @relation(fields: [batchId], references: [id])
   results      ExamResult[]
+  questions    ExamQuestion[]
 
   @@index([organizationId])
   @@index([branchId])
   @@index([courseId])
   @@index([batchId])
   @@index([examDate])
+}
+
+model ExamQuestion {
+  id            String   @id @default(uuid())
+  examId        String
+  question      String
+  optionA       String
+  optionB       String
+  optionC       String
+  optionD       String
+  correctAnswer String
+  marks         Decimal  @default(1) @db.Decimal(10, 2)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  exam Exam @relation(fields: [examId], references: [id], onDelete: Cascade)
+
+  @@index([examId])
 }
 
 model ExamResult {
@@ -275,23 +296,6 @@ model Payment {
   feeStructure FeeStructure @relation(fields: [feeStructureId], references: [id], onDelete: Cascade)
 
   @@index([feeStructureId])
-}
-
-enum FeeStatus {
-  PENDING
-  PARTIAL
-  PAID
-  OVERDUE
-  WAIVED
-}
-
-enum PaymentMethod {
-  CASH
-  UPI
-  CARD
-  BANK_TRANSFER
-  CHEQUE
-  OTHER
 }
 
 model User {
@@ -378,7 +382,38 @@ enum EmploymentStatus {
   OTHER
 }
 
+enum ExamType {
+  INTERNAL
+  FINAL
+  PRACTICAL
+  ASSESSMENT
+}
+
+enum ExamStatus {
+  DRAFT
+  SCHEDULED
+  COMPLETED
+  RESULTS_PUBLISHED
+}
+
 enum ExamResultStatus {
   PASS
   FAIL
+}
+
+enum FeeStatus {
+  PENDING
+  PARTIAL
+  PAID
+  OVERDUE
+  WAIVED
+}
+
+enum PaymentMethod {
+  CASH
+  UPI
+  CARD
+  BANK_TRANSFER
+  CHEQUE
+  OTHER
 }

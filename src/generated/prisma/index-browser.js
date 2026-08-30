@@ -226,13 +226,29 @@ exports.Prisma.EnrollmentScalarFieldEnum = {
 exports.Prisma.ExamScalarFieldEnum = {
   id: 'id',
   name: 'name',
+  examType: 'examType',
   examDate: 'examDate',
   maxMarks: 'maxMarks',
   passingMarks: 'passingMarks',
+  status: 'status',
   organizationId: 'organizationId',
   branchId: 'branchId',
   courseId: 'courseId',
   batchId: 'batchId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.ExamQuestionScalarFieldEnum = {
+  id: 'id',
+  examId: 'examId',
+  question: 'question',
+  optionA: 'optionA',
+  optionB: 'optionB',
+  optionC: 'optionC',
+  optionD: 'optionD',
+  correctAnswer: 'correctAnswer',
+  marks: 'marks',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -356,6 +372,13 @@ exports.EmploymentStatus = exports.$Enums.EmploymentStatus = {
   OTHER: 'OTHER'
 };
 
+exports.ExamStatus = exports.$Enums.ExamStatus = {
+  DRAFT: 'DRAFT',
+  SCHEDULED: 'SCHEDULED',
+  COMPLETED: 'COMPLETED',
+  RESULTS_PUBLISHED: 'RESULTS_PUBLISHED'
+};
+
 exports.ExamResultStatus = exports.$Enums.ExamResultStatus = {
   PASS: 'PASS',
   FAIL: 'FAIL'
@@ -399,6 +422,7 @@ exports.Prisma.ModelName = {
   Student: 'Student',
   Enrollment: 'Enrollment',
   Exam: 'Exam',
+  ExamQuestion: 'ExamQuestion',
   ExamResult: 'ExamResult',
   FeeStructure: 'FeeStructure',
   Subsidy: 'Subsidy',
