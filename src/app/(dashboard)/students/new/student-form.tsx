@@ -61,13 +61,18 @@ export default function StudentForm({
       action={action}
       className="space-y-8 rounded-xl border bg-white p-6"
     >
-      {/* PERSONAL INFORMATION */}
+      {/* =========================
+          PERSONAL INFORMATION
+      ========================== */}
+
       <div>
         <h2 className="mb-4 text-lg font-semibold text-gray-900">
           Personal Information
         </h2>
 
         <div className="grid gap-5 md:grid-cols-2">
+          {/* Student Code */}
+
           <div>
             <label className="mb-2 block text-sm font-medium">
               Student Code
@@ -80,6 +85,8 @@ export default function StudentForm({
               className="w-full rounded-lg border px-4 py-3 uppercase outline-none focus:border-gray-900"
             />
           </div>
+
+          {/* Student Name */}
 
           <div>
             <label className="mb-2 block text-sm font-medium">
@@ -94,6 +101,8 @@ export default function StudentForm({
             />
           </div>
 
+          {/* Father */}
+
           <div>
             <label className="mb-2 block text-sm font-medium">
               Father&apos;s Name
@@ -103,8 +112,10 @@ export default function StudentForm({
               name="fatherName"
               placeholder="Father's name"
               className="w-full rounded-lg border px-4 py-3 outline-none focus:border-gray-900"
-            />
+          />
           </div>
+
+          {/* Mother */}
 
           <div>
             <label className="mb-2 block text-sm font-medium">
@@ -118,6 +129,8 @@ export default function StudentForm({
             />
           </div>
 
+          {/* DOB */}
+
           <div>
             <label className="mb-2 block text-sm font-medium">
               Date of Birth
@@ -130,6 +143,8 @@ export default function StudentForm({
             />
           </div>
 
+          {/* Gender */}
+
           <div>
             <label className="mb-2 block text-sm font-medium">
               Gender
@@ -139,22 +154,58 @@ export default function StudentForm({
               name="gender"
               className="w-full rounded-lg border bg-white px-4 py-3 outline-none focus:border-gray-900"
             >
-              <option value="">Select gender</option>
-              <option value="MALE">Male</option>
-              <option value="FEMALE">Female</option>
-              <option value="OTHER">Other</option>
+              <option value="">
+                Select gender
+              </option>
+
+              <option value="MALE">
+                Male
+              </option>
+
+              <option value="FEMALE">
+                Female
+              </option>
+
+              <option value="OTHER">
+                Other
+              </option>
             </select>
+          </div>
+
+          {/* Aadhaar */}
+
+          <div>
+            <label className="mb-2 block text-sm font-medium">
+              Aadhaar Number
+            </label>
+
+            <input
+              name="aadharNumber"
+              inputMode="numeric"
+              maxLength={12}
+              placeholder="12 digit Aadhaar number"
+              className="w-full rounded-lg border px-4 py-3 outline-none focus:border-gray-900"
+            />
+
+            <p className="mt-1 text-xs text-gray-500">
+              Enter 12 digits without spaces.
+            </p>
           </div>
         </div>
       </div>
 
-      {/* CONTACT INFORMATION */}
+      {/* =========================
+          CONTACT INFORMATION
+      ========================== */}
+
       <div>
         <h2 className="mb-4 text-lg font-semibold text-gray-900">
           Contact Information
         </h2>
 
         <div className="grid gap-5 md:grid-cols-2">
+          {/* Phone */}
+
           <div>
             <label className="mb-2 block text-sm font-medium">
               Phone
@@ -167,6 +218,8 @@ export default function StudentForm({
               className="w-full rounded-lg border px-4 py-3 outline-none focus:border-gray-900"
             />
           </div>
+
+          {/* Email */}
 
           <div>
             <label className="mb-2 block text-sm font-medium">
@@ -181,6 +234,8 @@ export default function StudentForm({
             />
           </div>
 
+          {/* Address */}
+
           <div className="md:col-span-2">
             <label className="mb-2 block text-sm font-medium">
               Address
@@ -194,6 +249,8 @@ export default function StudentForm({
             />
           </div>
 
+          {/* City */}
+
           <div>
             <label className="mb-2 block text-sm font-medium">
               City
@@ -205,6 +262,8 @@ export default function StudentForm({
               className="w-full rounded-lg border px-4 py-3 outline-none focus:border-gray-900"
             />
           </div>
+
+          {/* District */}
 
           <div>
             <label className="mb-2 block text-sm font-medium">
@@ -220,14 +279,120 @@ export default function StudentForm({
         </div>
       </div>
 
-      {/* ENROLLMENT */}
+      {/* =========================
+          ENROLLMENT INFORMATION
+      ========================== */}
+
       <div>
         <h2 className="mb-4 text-lg font-semibold text-gray-900">
-          Enrollment
+          Enrollment Information
+        </h2>
+
+        <div className="grid gap-5 md:grid-cols-2">
+          {/* Enrollment Number */}
+
+          <div>
+            <label className="mb-2 block text-sm font-medium">
+              Enrollment Number
+            </label>
+
+            <input
+              name="enrollmentNumber"
+              placeholder="e.g. ENR-2026-0001"
+              className="w-full rounded-lg border px-4 py-3 uppercase outline-none focus:border-gray-900"
+            />
+          </div>
+
+          {/* Year */}
+
+          <div>
+            <label className="mb-2 block text-sm font-medium">
+              Year
+            </label>
+
+            <input
+              name="year"
+              type="number"
+              min="2000"
+              max="2100"
+              placeholder="e.g. 2026"
+              className="w-full rounded-lg border px-4 py-3 outline-none focus:border-gray-900"
+            />
+          </div>
+
+          {/* Session */}
+
+          <div>
+            <label className="mb-2 block text-sm font-medium">
+              Session
+            </label>
+
+            <input
+              name="session"
+              placeholder="e.g. 2026-27"
+              className="w-full rounded-lg border px-4 py-3 outline-none focus:border-gray-900"
+            />
+          </div>
+
+          {/* Outcome */}
+
+          <div>
+            <label className="mb-2 block text-sm font-medium">
+              Employment / Outcome Status
+            </label>
+
+            <select
+              name="employmentStatus"
+              className="w-full rounded-lg border bg-white px-4 py-3 outline-none focus:border-gray-900"
+            >
+              <option value="">
+                Select outcome status
+              </option>
+
+              <option value="EMPLOYED">
+                Employed
+              </option>
+
+              <option value="ENTREPRENEUR">
+                Entrepreneur
+              </option>
+
+              <option value="HIGHER_EDUCATION">
+                Higher Education
+              </option>
+
+              <option value="INTERESTED_FOR_JOB">
+                Interested for Job
+              </option>
+
+              <option value="NOT_INTERESTED">
+                Not Interested
+              </option>
+
+              <option value="NOT_PLACED">
+                Not Placed
+              </option>
+
+              <option value="OTHER">
+                Other
+              </option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      {/* =========================
+          COURSE / BRANCH / BATCH
+      ========================== */}
+
+      <div>
+        <h2 className="mb-4 text-lg font-semibold text-gray-900">
+          Course & Training
         </h2>
 
         <div className="space-y-5">
           {/* BRANCH */}
+
           <div>
             <label className="mb-2 block text-sm font-medium">
               Branch
@@ -238,7 +403,10 @@ export default function StudentForm({
               required
               value={selectedBranchId}
               onChange={(e) => {
-                setSelectedBranchId(e.target.value);
+                setSelectedBranchId(
+                  e.target.value
+                );
+
                 setSelectedCourseId("");
               }}
               className="w-full rounded-lg border bg-white px-4 py-3 outline-none focus:border-gray-900"
@@ -252,13 +420,15 @@ export default function StudentForm({
                   key={branch.id}
                   value={branch.id}
                 >
-                  {branch.name} — {branch.stateName}
+                  {branch.name} —{" "}
+                  {branch.stateName}
                 </option>
               ))}
             </select>
           </div>
 
           {/* COURSE */}
+
           <div>
             <label className="mb-2 block text-sm font-medium">
               Course
@@ -270,7 +440,9 @@ export default function StudentForm({
               disabled={!selectedBranchId}
               value={selectedCourseId}
               onChange={(e) =>
-                setSelectedCourseId(e.target.value)
+                setSelectedCourseId(
+                  e.target.value
+                )
               }
               className="w-full rounded-lg border bg-white px-4 py-3 outline-none focus:border-gray-900 disabled:bg-gray-100"
             >
@@ -280,21 +452,25 @@ export default function StudentForm({
                   : "Select branch first"}
               </option>
 
-              {availableCourses.map((course) => (
-                <option
-                  key={course.id}
-                  value={course.id}
-                >
-                  {course.name}
-                  {course.durationMonths
-                    ? ` — ${course.durationMonths} months`
-                    : ""}
-                </option>
-              ))}
+              {availableCourses.map(
+                (course) => (
+                  <option
+                    key={course.id}
+                    value={course.id}
+                  >
+                    {course.name}
+
+                    {course.durationMonths
+                      ? ` — ${course.durationMonths} months`
+                      : ""}
+                  </option>
+                )
+              )}
             </select>
           </div>
 
           {/* BATCH */}
+
           <div>
             <label className="mb-2 block text-sm font-medium">
               Batch
@@ -312,28 +488,36 @@ export default function StudentForm({
                   : "Select course first"}
               </option>
 
-              {availableBatches.map((batch) => (
-                <option
-                  key={batch.id}
-                  value={batch.id}
-                >
-                  {batch.name} ({batch.code}) —{" "}
-                  {batch.status}
-                </option>
-              ))}
+              {availableBatches.map(
+                (batch) => (
+                  <option
+                    key={batch.id}
+                    value={batch.id}
+                  >
+                    {batch.name} (
+                    {batch.code}) —{" "}
+                    {batch.status}
+                  </option>
+                )
+              )}
             </select>
 
             {selectedCourseId &&
-              availableBatches.length === 0 && (
+              availableBatches.length ===
+                0 && (
                 <p className="mt-1 text-xs text-red-600">
-                  No batches available for this course.
+                  No batches available for
+                  this course.
                 </p>
               )}
           </div>
         </div>
       </div>
 
-      {/* BUTTONS */}
+      {/* =========================
+          BUTTONS
+      ========================== */}
+
       <div className="flex justify-end gap-3 border-t pt-6">
         <Link
           href="/students"

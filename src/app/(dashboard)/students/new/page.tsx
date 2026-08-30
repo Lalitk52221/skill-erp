@@ -12,55 +12,102 @@ export default async function NewStudentPage() {
     redirect("/login");
   }
 
+  // const branches = await prisma.branch.findMany({
+  //   where: {
+  //     organizationId: session.user.organizationId,
+  //   },
+  //   include: {
+  //     state: true,
+  //     courses: {
+  //       include: {
+  //         course: true,
+  //       },
+  //     },
+  //     batches: {
+  //       include: {
+  //         course: true,
+  //       },
+  //       orderBy: {
+  //         startDate: "desc",
+  //       },
+  //     },
+  //   },
+  //   orderBy: {
+  //     name: "asc",
+  //   },
+  // });
+
   const branches = await prisma.branch.findMany({
-    where: {
-      organizationId: session.user.organizationId,
-    },
-    include: {
-      state: true,
-      courses: {
-        include: {
-          course: true,
-        },
-      },
-      batches: {
-        include: {
-          course: true,
-        },
-        orderBy: {
-          startDate: "desc",
-        },
+  where: {
+    organizationId: session.user.organizationId,
+  },
+  include: {
+    state: true,
+    courses: {
+      include: {
+        course: true,
       },
     },
-    orderBy: {
-      name: "asc",
+    batches: {
+      orderBy: {
+        startDate: "desc",
+      },
     },
-  });
+  },
+  orderBy: {
+    name: "asc",
+  },
+});
 
-  const branchData = branches.map((branch) => ({
-    id: branch.id,
-    name: branch.name,
-    stateName: branch.state.name,
+  // const branchData = branches.map((branch) => ({
+  //   id: branch.id,
+  //   name: branch.name,
+  //   stateName: branch.state.name,
 
-    courses: branch.courses.map((branchCourse) => ({
-      id: branchCourse.course.id,
-      name: branchCourse.course.name,
-      code: branchCourse.course.code,
-      durationMonths: branchCourse.course.durationMonths,
-    })),
+  //   courses: branch.courses.map((branchCourse) => ({
+  //     id: branchCourse.course.id,
+  //     name: branchCourse.course.name,
+  //     code: branchCourse.course.code,
+  //     durationMonths: branchCourse.course.durationMonths,
+  //   })),
 
-    batches: branch.batches.map((batch) => ({
-      id: batch.id,
-      name: batch.name,
-      code: batch.code,
-      courseId: batch.courseId,
-      startDate: batch.startDate.toISOString(),
-      endDate: batch.endDate
-        ? batch.endDate.toISOString()
-        : null,
-      status: batch.status,
-    })),
-  }));
+  //   batches: branch.batches.map((batch) => ({
+  //     id: batch.id,
+  //     name: batch.name,
+  //     code: batch.code,
+  //     courseId: batch.courseId,
+  //     startDate: batch.startDate.toISOString(),
+  //     endDate: batch.endDate
+  //       ? batch.endDate.toISOString()
+  //       : null,
+  //     status: batch.status,
+  //   })),
+  // }));
+
+const branchData = branches.map((branch) => ({
+  id: branch.id,
+  name: branch.name,
+  stateName: branch.state.name,
+
+  courses: branch.courses.map((branchCourse) => ({
+    id: branchCourse.course.id,
+    name: branchCourse.course.name,
+    code: branchCourse.course.code,
+    durationMonths: branchCourse.course.durationMonths,
+  })),
+
+  batches: branch.batches.map((batch) => ({
+    id: batch.id,
+    name: batch.name,
+    code: batch.code,
+    courseId: batch.courseId,
+    startDate: batch.startDate.toISOString(),
+    endDate: batch.endDate
+      ? batch.endDate.toISOString()
+      : null,
+    status: batch.status,
+  })),
+}));
 
   return (
     <div className="max-w-3xl">

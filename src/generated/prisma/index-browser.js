@@ -193,6 +193,7 @@ exports.Prisma.StudentScalarFieldEnum = {
   motherName: 'motherName',
   dateOfBirth: 'dateOfBirth',
   gender: 'gender',
+  aadharNumber: 'aadharNumber',
   phone: 'phone',
   email: 'email',
   address: 'address',
@@ -207,13 +208,78 @@ exports.Prisma.StudentScalarFieldEnum = {
 
 exports.Prisma.EnrollmentScalarFieldEnum = {
   id: 'id',
+  enrollmentNumber: 'enrollmentNumber',
+  year: 'year',
+  session: 'session',
   admissionDate: 'admissionDate',
   completionDate: 'completionDate',
+  employmentStatus: 'employmentStatus',
   studentId: 'studentId',
   organizationId: 'organizationId',
   branchId: 'branchId',
   courseId: 'courseId',
   batchId: 'batchId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.ExamScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  examDate: 'examDate',
+  maxMarks: 'maxMarks',
+  passingMarks: 'passingMarks',
+  organizationId: 'organizationId',
+  branchId: 'branchId',
+  courseId: 'courseId',
+  batchId: 'batchId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.ExamResultScalarFieldEnum = {
+  id: 'id',
+  examId: 'examId',
+  studentId: 'studentId',
+  enrollmentId: 'enrollmentId',
+  marks: 'marks',
+  percentage: 'percentage',
+  result: 'result',
+  remarks: 'remarks',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.FeeStructureScalarFieldEnum = {
+  id: 'id',
+  enrollmentId: 'enrollmentId',
+  totalAmount: 'totalAmount',
+  discount: 'discount',
+  finalAmount: 'finalAmount',
+  status: 'status',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.SubsidyScalarFieldEnum = {
+  id: 'id',
+  feeStructureId: 'feeStructureId',
+  type: 'type',
+  amount: 'amount',
+  letterUrl: 'letterUrl',
+  notes: 'notes',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.PaymentScalarFieldEnum = {
+  id: 'id',
+  feeStructureId: 'feeStructureId',
+  amount: 'amount',
+  paymentDate: 'paymentDate',
+  paymentMethod: 'paymentMethod',
+  receiptNumber: 'receiptNumber',
+  notes: 'notes',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -280,6 +346,44 @@ exports.StudentStatus = exports.$Enums.StudentStatus = {
   ON_HOLD: 'ON_HOLD'
 };
 
+exports.EmploymentStatus = exports.$Enums.EmploymentStatus = {
+  EMPLOYED: 'EMPLOYED',
+  ENTREPRENEUR: 'ENTREPRENEUR',
+  HIGHER_EDUCATION: 'HIGHER_EDUCATION',
+  INTERESTED_FOR_JOB: 'INTERESTED_FOR_JOB',
+  NOT_INTERESTED: 'NOT_INTERESTED',
+  NOT_PLACED: 'NOT_PLACED',
+  OTHER: 'OTHER'
+};
+
+exports.ExamResultStatus = exports.$Enums.ExamResultStatus = {
+  PASS: 'PASS',
+  FAIL: 'FAIL'
+};
+
+exports.FeeStatus = exports.$Enums.FeeStatus = {
+  PENDING: 'PENDING',
+  PARTIAL: 'PARTIAL',
+  PAID: 'PAID',
+  OVERDUE: 'OVERDUE',
+  WAIVED: 'WAIVED'
+};
+
+exports.SubsidyType = exports.$Enums.SubsidyType = {
+  BPL: 'BPL',
+  GOVT_SCHOOL_LETTER: 'GOVT_SCHOOL_LETTER',
+  OTHER: 'OTHER'
+};
+
+exports.PaymentMethod = exports.$Enums.PaymentMethod = {
+  CASH: 'CASH',
+  UPI: 'UPI',
+  CARD: 'CARD',
+  BANK_TRANSFER: 'BANK_TRANSFER',
+  CHEQUE: 'CHEQUE',
+  OTHER: 'OTHER'
+};
+
 exports.UserStatus = exports.$Enums.UserStatus = {
   ACTIVE: 'ACTIVE',
   INACTIVE: 'INACTIVE'
@@ -294,6 +398,11 @@ exports.Prisma.ModelName = {
   Batch: 'Batch',
   Student: 'Student',
   Enrollment: 'Enrollment',
+  Exam: 'Exam',
+  ExamResult: 'ExamResult',
+  FeeStructure: 'FeeStructure',
+  Subsidy: 'Subsidy',
+  Payment: 'Payment',
   User: 'User',
   Role: 'Role',
   Permission: 'Permission',

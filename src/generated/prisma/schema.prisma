@@ -23,6 +23,7 @@ model Organization {
   states      State[]
   students    Student[]
   users       User[]
+  exams       Exam[]
 }
 
 model State {
@@ -56,6 +57,7 @@ model Branch {
   enrollments    Enrollment[]
   students       Student[]
   users          User[]
+  exams          Exam[]
 
   @@unique([organizationId, code])
 }
@@ -73,6 +75,7 @@ model Course {
   branches       BranchCourse[]
   organization   Organization   @relation(fields: [organizationId], references: [id], onDelete: Cascade)
   enrollments    Enrollment[]
+  exams          Exam[]
 
   @@unique([organizationId, code])
 }
@@ -103,6 +106,7 @@ model Batch {
   branch      Branch       @relation(fields: [branchId], references: [id], onDelete: Cascade)
   course      Course       @relation(fields: [courseId], references: [id])
   enrollments Enrollment[]
+  exams       Exam[]
 
   @@unique([branchId, code])
 }
@@ -115,6 +119,7 @@ model Student {
   motherName     String?
   dateOfBirth    DateTime?
   gender         String?
+  aadharNumber   String?
   phone          String?
   email          String?
   address        String?
@@ -125,34 +130,168 @@ model Student {
   branchId       String
   createdAt      DateTime      @default(now())
   updatedAt      DateTime      @updatedAt
-  enrollments    Enrollment[]
-  branch         Branch        @relation(fields: [branchId], references: [id])
-  organization   Organization  @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  examResults    ExamResult[]
+
+  enrollments  Enrollment[]
+  branch       Branch       @relation(fields: [branchId], references: [id])
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
 
   @@unique([organizationId, studentCode])
+  @@index([aadharNumber])
 }
 
 model Enrollment {
-  id             String       @id @default(uuid())
-  admissionDate  DateTime     @default(now())
-  completionDate DateTime?
+  id               String            @id @default(uuid())
+  enrollmentNumber String?
+  year             Int?
+  session          String?
+  admissionDate    DateTime          @default(now())
+  completionDate   DateTime?
+  employmentStatus EmploymentStatus?
+
   studentId      String
   organizationId String
   branchId       String
   courseId       String
   batchId        String
-  createdAt      DateTime     @default(now())
-  updatedAt      DateTime     @updatedAt
-  batch          Batch        @relation(fields: [batchId], references: [id])
-  branch         Branch       @relation(fields: [branchId], references: [id])
-  course         Course       @relation(fields: [courseId], references: [id])
-  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
-  student        Student      @relation(fields: [studentId], references: [id], onDelete: Cascade)
 
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  batch        Batch        @relation(fields: [batchId], references: [id])
+  branch       Branch       @relation(fields: [branchId], references: [id])
+  course       Course       @relation(fields: [courseId], references: [id])
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  student      Student      @relation(fields: [studentId], references: [id], onDelete: Cascade)
+
+  feeStructure FeeStructure?
+  examResults  ExamResult[]
+
+  @@unique([organizationId, enrollmentNumber])
   @@index([studentId])
   @@index([branchId])
   @@index([courseId])
   @@index([batchId])
+  @@index([year])
+  @@index([employmentStatus])
+}
+
+model Exam {
+  id           String   @id @default(uuid())
+  name         String
+  examDate     DateTime
+  maxMarks     Decimal  @db.Decimal(10, 2)
+  passingMarks Decimal  @db.Decimal(10, 2)
+
+  organizationId String
+  branchId       String
+  courseId       String
+  batchId        String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  branch       Branch       @relation(fields: [branchId], references: [id])
+  course       Course       @relation(fields: [courseId], references: [id])
+  batch        Batch        @relation(fields: [batchId], references: [id])
+  results      ExamResult[]
+
+  @@index([organizationId])
+  @@index([branchId])
+  @@index([courseId])
+  @@index([batchId])
+  @@index([examDate])
+}
+
+model ExamResult {
+  id           String @id @default(uuid())
+  examId       String
+  studentId    String
+  enrollmentId String
+
+  marks      Decimal          @db.Decimal(10, 2)
+  percentage Decimal          @db.Decimal(5, 2)
+  result     ExamResultStatus
+  remarks    String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  exam       Exam       @relation(fields: [examId], references: [id], onDelete: Cascade)
+  student    Student    @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  enrollment Enrollment @relation(fields: [enrollmentId], references: [id], onDelete: Cascade)
+
+  @@unique([examId, studentId])
+  @@index([studentId])
+  @@index([enrollmentId])
+  @@index([examId])
+}
+
+model FeeStructure {
+  id           String    @id @default(uuid())
+  enrollmentId String
+  totalAmount  Decimal   @db.Decimal(10, 2)
+  discount     Decimal   @default(0) @db.Decimal(10, 2)
+  finalAmount  Decimal   @db.Decimal(10, 2)
+  status       FeeStatus @default(PENDING)
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+
+  enrollment Enrollment @relation(fields: [enrollmentId], references: [id], onDelete: Cascade)
+  payments   Payment[]
+  subsidy    Subsidy?
+
+  @@unique([enrollmentId])
+  @@index([enrollmentId])
+}
+
+model Subsidy {
+  id             String      @id @default(uuid())
+  feeStructureId String      @unique
+  type           SubsidyType
+  amount         Decimal     @db.Decimal(10, 2)
+  letterUrl      String?
+  notes          String?
+  createdAt      DateTime    @default(now())
+  updatedAt      DateTime    @updatedAt
+
+  feeStructure FeeStructure @relation(fields: [feeStructureId], references: [id], onDelete: Cascade)
+
+  @@index([feeStructureId])
+}
+
+model Payment {
+  id             String        @id @default(uuid())
+  feeStructureId String
+  amount         Decimal       @db.Decimal(10, 2)
+  paymentDate    DateTime      @default(now())
+  paymentMethod  PaymentMethod @default(CASH)
+  receiptNumber  String        @unique
+  notes          String?
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+
+  feeStructure FeeStructure @relation(fields: [feeStructureId], references: [id], onDelete: Cascade)
+
+  @@index([feeStructureId])
+}
+
+enum FeeStatus {
+  PENDING
+  PARTIAL
+  PAID
+  OVERDUE
+  WAIVED
+}
+
+enum PaymentMethod {
+  CASH
+  UPI
+  CARD
+  BANK_TRANSFER
+  CHEQUE
+  OTHER
 }
 
 model User {
@@ -221,4 +360,25 @@ enum BatchStatus {
   ACTIVE
   COMPLETED
   CANCELLED
+}
+
+enum SubsidyType {
+  BPL
+  GOVT_SCHOOL_LETTER
+  OTHER
+}
+
+enum EmploymentStatus {
+  EMPLOYED
+  ENTREPRENEUR
+  HIGHER_EDUCATION
+  INTERESTED_FOR_JOB
+  NOT_INTERESTED
+  NOT_PLACED
+  OTHER
+}
+
+enum ExamResultStatus {
+  PASS
+  FAIL
 }

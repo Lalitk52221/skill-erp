@@ -19,7 +19,7 @@ import {
   ChevronRight,
   Menu,
   X,
-  LogOut,
+  // LogOut,
   Moon,
   Sun,
   UserCog,
@@ -140,7 +140,7 @@ export default function Sidebar() {
       {/* SIDEBAR */}
       <aside
         className={`
-          fixed inset-y-0 left-0 z-[60]
+          fixed inset-y-0 left-0 z-60
           flex flex-col
           border-r
           bg-white
@@ -148,7 +148,7 @@ export default function Sidebar() {
           transition-all duration-300 ease-in-out
           dark:border-gray-800
           dark:bg-gray-950
-          ${collapsed ? "w-[76px]" : "w-64"}
+          ${collapsed ? "w-19" : "w-64"}
           ${
             mobileOpen
               ? "translate-x-0"
